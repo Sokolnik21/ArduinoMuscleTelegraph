@@ -62,17 +62,31 @@ void loop() {
         if(ACTIVE_MUSCLE_TIME + INACTIVE_MUSCLE_TIME == DOT_CHUNK_DURATION) {
           if(ACTIVE_MUSCLE_TIME > INACTIVE_MUSCLE_TIME) {
             Serial.println("ACTIVE");
-            handle_down_duration(DOWN_DURATION, TEXT, &TEXT_ID, &CURR_NODE, &PROGRAM_STATE);
-            
+            switch(handle_down_duration(DOWN_DURATION, TEXT, &TEXT_ID, &CURR_NODE, &PROGRAM_STATE)) {
+              case ERROR_MORSE_CODING:
+                Serial.println("Wrong representation of morse sign");
+                UP_DURATION = 0;
+                break;
+              default:
+                UP_DURATION++;
+            }
             DOWN_DURATION = 0;
-            UP_DURATION++;
           }
           else {
             Serial.println("inactive");
-            handle_up_duration(UP_DURATION, TEXT, &TEXT_ID, &CURR_NODE, &PROGRAM_STATE);
-            
+            switch(handle_up_duration(UP_DURATION, TEXT, &TEXT_ID, &CURR_NODE, &PROGRAM_STATE)) {
+              case ERROR_LATIN_CODING:
+                Serial.println("Wrong representation of latin sign");
+                DOWN_DURATION = 0;
+                break;
+              case ERROR_MORSE_CODING:
+                Serial.println("Wrong representation of morse sign");
+                DOWN_DURATION = 0;
+                break;
+              default:
+                DOWN_DURATION++;
+            }
             UP_DURATION = 0;
-            DOWN_DURATION++;
           }
           ACTIVE_MUSCLE_TIME = 0;
           INACTIVE_MUSCLE_TIME = 0;

@@ -22,7 +22,7 @@ int handle_down_duration(int DOWN_DURATION, char *TEXT, int *TEXT_ID, node **CUR
       return LONG_INTERVAL;
     default:
       *PROGRAM_STATE = WRITE_TEXT_T;
-      return -1;
+      return ERROR_MORSE_CODING;
   }
   return 0;
 }
@@ -39,7 +39,7 @@ int handle_up_duration(int UP_DURATION, char *TEXT, int *TEXT_ID, node **CURR_NO
       else {
         *CURR_NODE = MORSE;
         *PROGRAM_STATE = WRITE_TEXT_T;
-        return -2;
+        return ERROR_LATIN_CODING;
       }
     case MEDIUM_INTERVAL:
       if((*CURR_NODE) -> dash != NULL) {
@@ -49,10 +49,10 @@ int handle_up_duration(int UP_DURATION, char *TEXT, int *TEXT_ID, node **CURR_NO
       else {
         *CURR_NODE = MORSE;
         *PROGRAM_STATE = WRITE_TEXT_T;
-        return -2;
+        return ERROR_LATIN_CODING;
       }
     default:
       *PROGRAM_STATE = WRITE_TEXT_T;
-      return -1;
+      return ERROR_MORSE_CODING;
   }
 }
